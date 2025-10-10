@@ -1,12 +1,16 @@
-import { Button } from "@/components/ui/button"
+import { CustomPagination } from "@/components/custom/CustomPagination"
+import { products } from "@/mocks/products.mock"
+import { CustomJumbotron } from "@/shop/components/CustomJumbotron"
+import { ProductsGrid } from "@/shop/components/ProductsGrid"
 
 export const HomePage = () => {
   return (
     <>
-      <div>HomePage</div>
-      <Button className="font-montserrat">Hola mundo</Button>
-      <Button className="font-montserrat font-thin">Hola mundo</Button>
-      <Button className="font-montserrat font-bold">Hola mundo</Button>
+      <CustomJumbotron title="Todos los productos" subTitle="" />
+
+      <ProductsGrid products={products} />
+
+      <CustomPagination totalPages={5} />
     </>
   )
 }
