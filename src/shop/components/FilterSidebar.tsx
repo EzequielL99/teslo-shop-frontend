@@ -1,16 +1,30 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { useSearchParams } from "react-router";
 
 export const FilterSidebar = () => {
-    const categories = [
-        { id: "tshirts", label: "Camisetas", count: 12 },
-        { id: "hoodies", label: "Sudaderas", count: 8 },
-        { id: "jackets", label: "Chaquetas", count: 6 },
-        { id: "accessories", label: "Accesorios", count: 15 },
-    ];
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const currentSizes = searchParams.get('sizes')?.split(',') || []; // xs,l,xl
+    const currentPrice = searchParams.get('price') || 'any';
+
+    const handleSizeChanged = (size: string) => {
+        const newSizes = currentSizes.includes(size)
+            ? currentSizes.filter(s => s !== size)
+            : [...currentSizes, size];
+
+        searchParams.set('page', '1');
+        searchParams.set('sizes', newSizes.join(','));
+        setSearchParams(searchParams);
+    }
+
+    const handlePriceChange = (price: string) => {
+        searchParams.set('page', '1');
+        searchParams.set('price', price);
+        setSearchParams(searchParams);
+    }
 
     const sizes = [
         { id: "xs", label: "XS" },
@@ -20,14 +34,21 @@ export const FilterSidebar = () => {
         { id: "xl", label: "XL" },
         { id: "xxl", label: "XXL" },
     ];
-
-    const colors = [
-        { id: "black", label: "Negro", color: "bg-black" },
-        { id: "white", label: "Blanco", color: "bg-white border" },
-        { id: "grey", label: "Gris", color: "bg-gray-400" },
-        { id: "navy", label: "Azul Marino", color: "bg-blue-900" },
-    ];
-
+    /*
+        const categories = [
+            { id: "tshirts", label: "Camisetas", count: 12 },
+            { id: "hoodies", label: "Sudaderas", count: 8 },
+            { id: "jackets", label: "Chaquetas", count: 6 },
+            { id: "accessories", label: "Accesorios", count: 15 },
+        ];
+    
+        const colors = [
+            { id: "black", label: "Negro", color: "bg-black" },
+            { id: "white", label: "Blanco", color: "bg-white border" },
+            { id: "grey", label: "Gris", color: "bg-gray-400" },
+            { id: "navy", label: "Azul Marino", color: "bg-blue-900" },
+        ];
+    */
     return (
         <div className="w-64 space-y-6">
             <div>
@@ -41,9 +62,10 @@ export const FilterSidebar = () => {
                     {sizes.map((size) => (
                         <Button
                             key={size.id}
-                            variant="outline"
+                            variant={currentSizes.includes(size.id) ? 'default' : 'outline'}
                             size="sm"
                             className="h-8"
+                            onClick={() => handleSizeChanged(size.id)}
                         >
                             {size.label}
                         </Button>
@@ -58,23 +80,48 @@ export const FilterSidebar = () => {
                 <h4 className="font-medium">Precio</h4>
                 <RadioGroup defaultValue="" className="space-y-3">
                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="any" id="priceAny" />
+                        <RadioGroupItem
+                            value="any"
+                            id="priceAny"
+                            checked={currentPrice === 'any'}
+                            onClick={() => handlePriceChange('any')}
+                        />
                         <Label htmlFor="priceAny" className="text-sm cursor-pointer">Cualquier precio</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="0-50" id="price1" />
+                        <RadioGroupItem
+                            value="0-50"
+                            id="price1"
+                            checked={currentPrice === '0-50'}
+                            onClick={() => handlePriceChange('0-50')}
+                        />
                         <Label htmlFor="price1" className="text-sm cursor-pointer">$0 - $50</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="50-100" id="price2" />
+                        <RadioGroupItem
+                            value="50-100"
+                            id="price2"
+                            checked={currentPrice === '50-100'}
+                            onClick={() => handlePriceChange('50-100')}
+                        />
                         <Label htmlFor="price2" className="text-sm cursor-pointer">$50 - $100</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="100-200" id="price3" />
+                        <RadioGroupItem
+                            value="100-200"
+                            id="price3"
+                            checked={currentPrice === '100-200'}
+                            onClick={() => handlePriceChange('100-200')}
+                        />
                         <Label htmlFor="price3" className="text-sm cursor-pointer">$100 - $200</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="200+" id="price4" />
+                        <RadioGroupItem
+                            value="200+"
+                            id="price4"
+                            checked={currentPrice === '200+'}
+                            onClick={() => handlePriceChange('200+')}
+                        />
                         <Label htmlFor="price4" className="text-sm cursor-pointer">$200+</Label>
                     </div>
                 </RadioGroup>
