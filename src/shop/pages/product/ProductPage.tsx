@@ -82,9 +82,9 @@ export const ProductPage = () => {
                                 onClick={() => setIsFavorite(!isFavorite)}
                                 aria-label="Agregar a favoritos"
                                 size='icon'
-                                className="px-6 h-auto"
+                                className={`px-6 h-auto hover:bg-transparent ${isFavorite ? 'border-red-500 text-red-500 hover:border-primary hover:text-primary' : 'border-primary hover:border-red-500 hover:text-red-500'}`}
                             >
-                                <Heart className={`size-5 ${isFavorite ? 'fill-current' : ''}`} />
+                                <Heart className={`size-5 ${isFavorite ? 'fill-current ' : ''}`} />
                             </Button>
                         </div>
 
